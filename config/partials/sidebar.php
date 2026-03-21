@@ -71,6 +71,10 @@ $i_student  = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path 
       <?= _nav('/modules/docente/views/asistencia.php', $i_check,   'Registrar',        'asistencia',       $_activeNav) ?>
       <?= _nav('/modules/docente/views/historial.php',  $i_history, 'Historial',        'historial-docente', $_activeNav) ?>
 
+      <!-- Inscripciones -->
+      <p class="nav-label">Inscripciones</p>
+      <?= _nav('/modules/control_escolar/views/inscripciones.php', $i_book, 'Inscripciones', 'inscripciones', $_activeNav) ?>
+
       <!-- Consultas -->
       <p class="nav-label">Datos</p>
       <?= _nav('/modules/control_escolar/views/consultas.php', $i_search, 'Consultas', 'consultas', $_activeNav) ?>
@@ -89,6 +93,9 @@ $i_student  = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path 
       <?= _nav('/modules/estudiante/views/historial.php', $i_history, 'Historial', 'historial-alumno', $_activeNav) ?>
 
     <?php elseif ($_rol === 'control_escolar'): ?>
+
+      <p class="nav-label">Inscripciones</p>
+      <?= _nav('/modules/control_escolar/views/inscripciones.php', $i_book, 'Inscripciones', 'inscripciones', $_activeNav) ?>
 
       <p class="nav-label">Registros</p>
       <?= _nav('/modules/control_escolar/views/consultas.php', $i_search, 'Consultas', 'consultas', $_activeNav) ?>

@@ -42,11 +42,12 @@ async function init() {
       return
     }
 
-    if (data.sin_grupo) {
+    if (data.sin_grupo || data.sin_horario) {
       document.getElementById('gridMaterias').innerHTML =
         `<div class="card text-center text-sm py-8">
-           <p class="font-semibold text-warning mb-1">Sin grupo asignado</p>
-           <p class="text-text-muted">El administrador aún no ha configurado tu grupo.<br>Vuelve más tarde o contáctalo.</p>
+           <p class="font-semibold text-warning mb-2">Sin materias asignadas</p>
+           <p class="text-text-muted">Control Escolar aún no ha cargado tu horario en el sistema.<br/>
+             Si ya te reinscribiste, acude a Control Escolar para que registren tus materias.</p>
          </div>`
       return
     }

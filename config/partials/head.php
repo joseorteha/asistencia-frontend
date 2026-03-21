@@ -10,9 +10,12 @@ $title     ??= 'Sistema de Asistencia — ITSZ';
 $bodyClass ??= '';
 $dataPage  ??= '';
 
-$manifest = [];
 $manifestPath = __DIR__ . '/../../public/assets/bundle/.vite/manifest.json';
-if (file_exists($manifestPath)) {
+$manifest = [];
+$viteDevUrl = 'http://localhost:5173';
+$isDev = !file_exists($manifestPath);
+
+if (!$isDev) {
     $manifest = json_decode(file_get_contents($manifestPath), true);
 }
 $cssFile = $manifest['src/js/main.js']['css'][0] ?? null;
@@ -28,7 +31,10 @@ $cssFile = $manifest['src/js/main.js']['css'][0] ?? null;
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet" />
 
-  <?php if ($cssFile): ?>
+  <?php if ($isDev): ?>
+    <script type="module" src="<?= $viteDevUrl ?>/@vite/client"></script>
+    <script type="module" src="<?= $viteDevUrl ?>/src/js/main.js"></script>
+  <?php elseif ($cssFile): ?>
     <link rel="stylesheet" href="/public/assets/bundle/<?= htmlspecialchars($cssFile) ?>">
   <?php endif; ?>
 </head>

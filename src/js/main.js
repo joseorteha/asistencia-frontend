@@ -29,8 +29,9 @@ if (page === 'estudiante-dashboard') import('./modules/estudianteDashboard.js')
 if (page === 'estudiante-historial') import('./modules/estudianteDashboard.js')
 
 // ── Control Escolar ───────────────────────────────────────────────────────────
-if (page === 'ce-consultas') import('./modules/ceConsultas.js')
-if (page === 'ce-reportes')  import('./modules/ceReportes.js')
+if (page === 'ce-inscripciones') import('./modules/ceInscripciones.js').then(m => m.init())
+if (page === 'ce-consultas')     import('./modules/ceConsultas.js')
+if (page === 'ce-reportes')      import('./modules/ceReportes.js')
 
 // ── Legacy (módulos existentes) ───────────────────────────────────────────────
 if (page === 'attendance') import('./modules/attendance.js')

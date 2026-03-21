@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../../config/database.php';
 
 // Redirigir si ya completó el onboarding
 $conn = getConnection();
-$st   = $conn->prepare("SELECT idGrupo, onboarding_ok FROM Alumnos WHERE idUsuario=? LIMIT 1");
+$st   = $conn->prepare("SELECT onboarding_ok FROM Alumnos WHERE idUsuario=? LIMIT 1");
 $uid  = (int)$_SESSION['user_id'];
 $st->bind_param('i', $uid);
 $st->execute();
@@ -17,9 +17,6 @@ $st->close();
 if ($alumno && $alumno['onboarding_ok']) {
     header('Location: /modules/estudiante/views/dashboard.php'); exit;
 }
-
-// Si ya tiene grupo asignado (por admin), saltar al paso de perfil
-$hasGrupo = ($alumno && $alumno['idGrupo']) ? 'true' : 'false';
 
 $_nombre = htmlspecialchars($_SESSION['nombre'] ?? '');
 $title   = 'Bienvenido — ITSZ';
@@ -46,7 +43,7 @@ $jsFile  = $manifest['src/js/main.js']['file']   ?? null;
     <link rel="stylesheet" href="/public/assets/bundle/<?= htmlspecialchars($cssFile) ?>">
   <?php endif; ?>
 </head>
-<body data-page="<?= $dataPage ?>" data-has-grupo="<?= $hasGrupo ?>" class="bg-muted min-h-screen flex flex-col">
+<body data-page="<?= $dataPage ?>" class="bg-muted min-h-screen flex flex-col">
 
   <!-- Header -->
   <header class="bg-primary-dark text-white px-5 py-4 flex items-center gap-3 shrink-0">
@@ -57,7 +54,6 @@ $jsFile  = $manifest['src/js/main.js']['file']   ?? null;
     </div>
   </header>
 
-  <!-- Wizard -->
   <div class="flex-1 flex items-start justify-center px-4 py-8 pb-16">
     <div class="w-full max-w-md">
 
@@ -67,64 +63,14 @@ $jsFile  = $manifest['src/js/main.js']['file']   ?? null;
         <h1 class="font-serif text-2xl font-bold text-primary-dark mb-1">
           Hola, <?= $_nombre ?>
         </h1>
-        <p class="text-text-muted text-sm" id="wizardSubtitle">
-          Cuéntanos un poco sobre ti para configurar tu experiencia.
+        <p class="text-text-muted text-sm">
+          Tu horario ya fue asignado por Control Escolar.<br/>
+          Solo personaliza tu perfil para continuar.
         </p>
       </div>
 
-      <!-- Step indicator (4 pasos) -->
-      <div id="stepIndicator" class="flex items-center mb-8 px-2">
-        <div id="dot1" class="step-dot active">1</div>
-        <div class="step-line mx-2 flex-1"></div>
-        <div id="dot2" class="step-dot">2</div>
-        <div class="step-line mx-2 flex-1"></div>
-        <div id="dot3" class="step-dot">3</div>
-        <div class="step-line mx-2 flex-1"></div>
-        <div id="dot4" class="step-dot">4</div>
-      </div>
-
-      <!-- ── Step 1: Carrera ─────────────────────────────────────────── -->
-      <div id="step1" class="wizard-step active">
-        <h2 class="font-semibold text-text text-lg mb-1">¿Qué carrera estudias?</h2>
-        <p class="text-xs text-text-muted mb-4">Selecciona tu programa académico.</p>
-        <div id="carreraGrid" class="grid gap-3">
-          <div class="text-center text-text-muted text-sm py-6">Cargando…</div>
-        </div>
-        <div id="msgStep1" class="msg mt-4"></div>
-      </div>
-
-      <!-- ── Step 2: Semestre ────────────────────────────────────────── -->
-      <div id="step2" class="wizard-step">
-        <button id="btnVolverCarrera" class="flex items-center gap-1 text-sm text-text-muted mb-4">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-          </svg>
-          Cambiar carrera
-        </button>
-        <p id="carreraSelLabel" class="text-xs font-bold text-primary uppercase tracking-wide mb-2"></p>
-        <h2 class="font-semibold text-text text-lg mb-1">¿En qué semestre estás?</h2>
-        <p class="text-xs text-text-muted mb-4">Selecciona tu semestre actual.</p>
-        <div id="semestreGrid" class="grid grid-cols-3 gap-3"></div>
-        <div id="msgStep2" class="msg mt-4"></div>
-      </div>
-
-      <!-- ── Step 3: Grupo ───────────────────────────────────────────── -->
-      <div id="step3" class="wizard-step">
-        <button id="btnVolverSemestre" class="flex items-center gap-1 text-sm text-text-muted mb-4">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-          </svg>
-          Cambiar semestre
-        </button>
-        <p id="grupoSelLabel" class="text-xs font-bold text-primary uppercase tracking-wide mb-2"></p>
-        <h2 class="font-semibold text-text text-lg mb-1">¿Cuál es tu grupo?</h2>
-        <p class="text-xs text-text-muted mb-4">Elige el grupo y campus donde estás inscrito.</p>
-        <div id="grupoGrid" class="grid gap-3"></div>
-        <div id="msgStep3" class="msg mt-4"></div>
-      </div>
-
-      <!-- ── Step 4: Perfil ──────────────────────────────────────────── -->
-      <div id="step4" class="wizard-step">
+      <!-- Perfil -->
+      <div class="card">
         <h2 class="font-semibold text-text text-lg mb-1">Personaliza tu perfil</h2>
         <p class="text-xs text-text-muted mb-6">Todo es opcional — puedes cambiarlo después.</p>
 
